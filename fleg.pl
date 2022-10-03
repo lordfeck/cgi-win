@@ -51,16 +51,18 @@ $t_begin = gettimeofday;
 
 my @epithet = qw(People's Princely Grand Holy Stately Great Ancient Old 
 Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
-Eternal Soviet);
+Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
+Teutonic);
 
-my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Calphate
-Lordship Earldom States Junta Reich Commonwealth);
+my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
+Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
+Order);
 
 my @land_name1 = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
-Cross Bomb Ethel Amer);
+Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank);
 
 my @land_name2 = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica);
+ica net ria);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -157,7 +159,9 @@ christen_the_land;
 say $country_name unless($use_cgi);
 
 my $ts = time;
-$fleg_write_path = "$fleg_write_dir/tmp_$ts.png";
+
+die "Cannot find $fleg_write_dir" unless -f $fleg_write_dir;
+$fleg_write_path = "$fleg_write_dir/fleg_$ts.png";
 open (my $TMPFILE, ">", "$fleg_write_path") or die "Cannot open $fleg_write_path";
 
 binmode $TMPFILE;
@@ -183,12 +187,11 @@ __DATA__
     <title>FLEGMAKER</title>
 </head>
 <body>
-
 <div id="greetLeader"></div>
 <div id="flegPole"><img src="[% fleg_write_path %]"></div>
 <div id="countryName">[% country_name %]</div>
 
-<p>Flegmaker vi[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
+<p>Flegmaker v[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
 <p>Built in [% t_end %] seconds.</p>
 </body>
 </html>

@@ -14,7 +14,7 @@ We assume that:
 * CPAN or cpanm bootstrapped.
 * Some Unix sysadmin knowhow.
 
-Firstly you ought to install Perl modules to process CGI and templates:
+Firstly you ought to install Perl modules to process CGI and templates (**On your own server these must be available globally for your fcgiwrap to access them. Install as root/sudo to make them global?**):
 
 `cpan install CGI Template::Toolkit`
 
@@ -39,6 +39,8 @@ $ cpan install GD
 ```
 
 GD may already be installed if you are using shared hosting.
+
+*Note:* You will want to run regular cleanup on `/img` until we use embedded images.
 
 # Why CGI?
 You're right to ask this, I'd recommend all serious Perl webdev use a serious framework like Mojolicious.
