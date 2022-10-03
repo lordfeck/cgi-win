@@ -160,9 +160,10 @@ say $country_name unless($use_cgi);
 
 my $ts = time;
 
-die "Cannot find $fleg_write_dir" unless -f $fleg_write_dir;
+die "Cannot find $fleg_write_dir" unless -d $fleg_write_dir;
 $fleg_write_path = "$fleg_write_dir/fleg_$ts.png";
-open (my $TMPFILE, ">", "$fleg_write_path") or die "Cannot open $fleg_write_path";
+open (my $TMPFILE, ">", "$fleg_write_path") 
+    or die "Cannot open $fleg_write_path to write";
 
 binmode $TMPFILE;
 print $TMPFILE $fleg_canvas->png;
