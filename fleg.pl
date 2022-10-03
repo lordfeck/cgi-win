@@ -2,10 +2,11 @@
 
 #===============================================================================
 # Flegmaker v0.1
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#===============================================================================
 # (C) Thransoft, 2022
 # GPL v3.
 # soft.thran.uk
+# Authored: 03/10/2022
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Initially generate a random flag.
@@ -13,38 +14,53 @@
 #
 #===============================================================================
 
-use v5.32;
+use v5.25;
 use warnings;
+use Time::HiRes qw(gettimeofday);
 
 use GD;
 use CGI;
+use Template;
 
-my $VERSION = "0.9";
+my $VERSION = "0.1";
 
 #===============================================================================
 # Begin Globals and Conf
 #===============================================================================
 
 my ($fleg_width, $fleg_height) = (700, 460);
-my $use_cgi = 0;
+my $use_cgi = 1;
 my $true_random = 1;
-my $fleg_write_path;
+my $fleg_write_dir = "./img";
 
-my $fleg_canvas; # Global, written by all make_$FLAGTYPE functions
-my ($c_white, $c1, $c2, $c3);
+my $fleg_canvas;            # Global, written by all make_$FLAGTYPE functions
+my ($c_white, $c1, $c2, $c3);       # Predeclare colours
+my ($t_begin, $t_end) = ("" , "");  # Predeclare time for stats
+my $fleg_write_path = "";           # Final full path where fleg is written
+my $country_name = "";              # A fine nation worthy of the ages.
 
+my $template = Template->new();
+my $tpl    = join "\n", <DATA>;
+my %model;
+
+$t_begin = gettimeofday;
 
 #===============================================================================
 # End globals, begin phrasemaker
 #===============================================================================
+
 my @epithet = qw(People's Princely Grand Holy Stately Great Ancient Old 
-Democratic Theocratic Free High Noble Liberal Serene Socialist);
+Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
+Eternal Soviet);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Calphate
-Lordship Earldom States);
+Lordship Earldom States Junta Reich Commonwealth);
 
-my @land_name1 = qw(Shi Leo Lea Orm Mos);
-my @land_name2 = qw(topia land ville field shire istan ca iffi ton ina rie via);
+my @land_name1 = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
+Cross Bomb Ethel Amer);
+
+my @land_name2 = qw(topia land ville field shire istan ca iffi ton ina rie via
+ica);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -57,43 +73,23 @@ body {
     background-color: gray;
 }
 
-p#countryName {
+div#countryName {
     font-family: serif;
     font-style: italic;
+}
+
+div#greetLeader {
+
+}
+
+div#countryName {
+
 }
 
 EOF
 
 #===============================================================================
-# End CSS. Begin HTML
-#===============================================================================
-my %fillers = (
-    title => "",
-);
-
-my $HEADER = << "EOF";
-<!doctype HTML>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style type="text/css">
-    $STYLESHEET
-    </style>
-
-    <title>FLEGMAKER $fillers{title}</title>
-</head>
-<body>
-EOF
-
-my $FOOTER = << "EOF";
-<p>Flegmaker v$VERSION, by Thransoft.</p>
-</body>
-</html>
-EOF
-
-#===============================================================================
-# End HTML. Begin Perl fndef
+# End CSS. Begin fndef
 #===============================================================================
 
 sub make_tricolour {
@@ -107,6 +103,28 @@ sub make_tricolour {
 sub get_color {
     # Limit range so we're neither too bright nor too dim
     return 20 + int rand(210); 
+}
+
+sub christen_the_land {
+   $country_name .= "$epithet[int rand(scalar(@epithet))] "; 
+   $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
+   $country_name .= "$land_name1[int rand(scalar(@land_name1))]"; 
+   $country_name .= "$land_name2[int rand(scalar(@land_name2))]"; 
+}
+
+sub do_cgi {
+    my $cgi = CGI->new();
+
+    $model{stylesheet} = $STYLESHEET;
+    $model{fleg_write_path} = $fleg_write_path;
+    $model{country_name} = $country_name;
+    $model{version} = $VERSION;
+    $model{t_end} = gettimeofday - $t_begin;
+
+    print $cgi->header;
+
+    $template->process(\$tpl,\%model) 
+        or die "Template process failed", $template->error();
 }
 
 #===============================================================================
@@ -135,9 +153,43 @@ $fleg_canvas->fill(0,0,$c_white);
 
 # TODO: Other flag styles.
 make_tricolour;
+christen_the_land;
+say $country_name unless($use_cgi);
 
-open (my $TMPFILE, ">", "./tmp.png") or die "Cannot open";
+my $ts = time;
+$fleg_write_path = "$fleg_write_dir/tmp_$ts.png";
+open (my $TMPFILE, ">", "$fleg_write_path") or die "Cannot open $fleg_write_path";
 
 binmode $TMPFILE;
 print $TMPFILE $fleg_canvas->png;
 close $TMPFILE;
+
+do_cgi if ($use_cgi);
+
+#===============================================================================
+# Data section - TT skeleton
+#===============================================================================
+
+__DATA__
+<!doctype HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+    [% stylesheet %]
+    </style>
+
+    <title>FLEGMAKER</title>
+</head>
+<body>
+
+<div id="greetLeader"></div>
+<div id="flegPole"><img src="[% fleg_write_path %]"></div>
+<div id="countryName">[% country_name %]</div>
+
+<p>Flegmaker vi[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
+<p>Built in [% t_end %] seconds.</p>
+</body>
+</html>
+

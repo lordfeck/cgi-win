@@ -1,5 +1,6 @@
 THRANSOFT CGI-WIN
 =========================
+Fun CGI scripts for the modern web.
 
 # CONTENTS
 What's inside?
@@ -13,9 +14,9 @@ We assume that:
 * CPAN or cpanm bootstrapped.
 * Some Unix sysadmin knowhow.
 
-First of all, you need to install a Perl module to work with CGI.
+Firstly you ought to install Perl modules to process CGI and templates:
 
-`cpan install CGI`
+`cpan install CGI Template::Toolkit`
 
 Then you must enable FastCGI on your web server. I use Nginx so that's all I will detail. Apache instructions are available everywhere.
 
@@ -37,9 +38,11 @@ Then install GD using CPAN:
 $ cpan install GD
 ```
 
+GD may already be installed if you are using shared hosting.
+
 # Why CGI?
 You're right to ask this, I'd recommend all serious Perl webdev use a serious framework like Mojolicious.
 
-In our case, these are simple scripts that you bung on a server. A full web framework is overkill. They just do their thing and be done.
+In our case, these are simple scripts that you bung on a server. A full web framework is overkill. They just do their thing and be done. This is a throwback to simpler times where you just throw your scripts onto a server and worry no more.
 
-Besides, with CGI, it is possible to run more than one script easily. It isn't so easy to run more than one web framework unless you really enjoy the intricacies of server admin (and the costs!)
+Besides, with CGI, it is possible to run more than one script easily. It isn't so easy to run more than one web framework unless you really enjoy the intricacies (and the costs) of server admin.
