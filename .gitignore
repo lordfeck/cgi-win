@@ -1,2 +1,3 @@
 img/*.png
 *.swp
+.DS_Store

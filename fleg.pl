@@ -37,9 +37,10 @@ my ($t_begin, $t_end) = ("" , "");  # Predeclare time for stats
 my $fleg_write_path = "";           # Final full path where fleg is written
 my $country_name = "";              # A fine nation worthy of the ages.
 
-my $template = Template->new();
-my $tpl    = join "\n", <DATA>;
-my %model;
+my $template = Template->new();     # Instantiate Template Toolkit
+my $tpl    = join "\n", <DATA>;     # Read __DATA__ and store as tpl
+my %model;                          # Model kvs used for template
+my %fleg_dispatch;                  # Dispatch table used to call a fleg fn
 
 $t_begin = gettimeofday;
 
@@ -146,6 +147,13 @@ sub make_dutchie {
     $fleg_canvas->filledRectangle(0, $third, $fleg_width, 0, $c3);
 }
 
+sub make_flag {
+    my @keys = keys %fleg_dispatch;
+    my $maxIdx = scalar @keys;
+    # Run a random fn inside fleg_dispatch
+    &{$fleg_dispatch{$keys[int rand($maxIdx)]}};
+}
+
 sub get_color {
     # Limit range so we're neither too bright nor too dim
     return 20 + int rand(210); 
@@ -194,9 +202,14 @@ $c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
 
 $fleg_canvas->fill(0,0,$c_white);
 
-#make_tricolour;
-make_dutchie;
+%fleg_dispatch = (
+    dutchie => \&make_dutchie,
+    tricolour => \&make_tricolour
+);
+
+make_flag;
 christen_the_land;
+
 say $country_name unless($use_cgi);
 
 my $ts = time;
