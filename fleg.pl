@@ -52,18 +52,18 @@ Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal);
 
-push @epithet, ("", "", "");
+push @epithet, ("", "", "");        # Small chance epithet is omitted
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
-Order Archipelago League Collective Protectorate Union Province );
+Order Archipelago League Collective Protectorate Union Province);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
-Hol Fran Shlo Pel Bran);
+Hol Fran Shlo Pel Bran Fle Nor);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah);
+ica net ria ova aty ava ah rina aq);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -141,9 +141,9 @@ sub make_tricolour {
 sub make_dutchie {
     my $third = $fleg_height/3;
 
-    $fleg_canvas->filledRectangle(0, $fleg_height, $fleg_width, $third*2, $c1);
-    $fleg_canvas->filledRectangle(0, $third*2, $fleg_width, $third, $c1);
-    $fleg_canvas->filledRectangle(0, $third, $fleg_width, 0, $c1);
+    $fleg_canvas->filledRectangle(0, $fleg_height, $fleg_width, 2*$third, $c1);
+    $fleg_canvas->filledRectangle(0, 2*$third, $fleg_width, $third, $c2);
+    $fleg_canvas->filledRectangle(0, $third, $fleg_width, 0, $c3);
 }
 
 sub get_color {
@@ -156,6 +156,7 @@ sub christen_the_land {
    $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
    $country_name .= $land_prefix[int rand(scalar(@land_prefix))]; 
    $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
+   chomp $country_name;
 }
 
 sub do_cgi {
