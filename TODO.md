@@ -6,6 +6,7 @@
 * also make country names rare
 * separate out config files
 * fleg can run without cgi, dump fleg and name then exit
+* seed number - will reproduce the same flag and country name with a seed number
 
 Other fleg styles:
 * dutchie

@@ -136,6 +136,13 @@ sub make_tricolour {
     $fleg_canvas->filledRectangle(2*$third, $fleg_height, $fleg_width, 0, $c3);
 }
 
+sub make_dutchie {
+    my $third = $fleg_height/3;
+
+    $fleg_canvas->filledRectangle(0, $fleg_height, $fleg_width, $third*2, $c1);
+    $fleg_canvas->filledRectangle(0, $third*2, $fleg_width, $third, $c1);
+    $fleg_canvas->filledRectangle(0, $third, $fleg_width, 0, $c1);
+}
 
 sub get_color {
     # Limit range so we're neither too bright nor too dim
@@ -184,7 +191,8 @@ $c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
 
 $fleg_canvas->fill(0,0,$c_white);
 
-make_tricolour;
+#make_tricolour;
+make_dutchie;
 christen_the_land;
 say $country_name unless($use_cgi);
 
