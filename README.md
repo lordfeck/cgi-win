@@ -25,20 +25,20 @@ Then you must enable FastCGI on your web server. I use Nginx so that's all I wil
 ```
 
 ## Setup - Fleg.pl
-To enable graphics support on Perl, it is necessary to install dependent packages in your environment. (This is not necessary on Strawberry Perl for Windows). For Debian Linux, do the following:
+To enable graphics support on Perl, it is necessary to install dependent packages in your environment. (This step is not necessary on Strawberry Perl for Windows). For Debian Linux, do the following:
 
 Open a command window and run the following as root/sudo:
 ```
 # apt install build-essential libgd-dev
 ```
 
-Then install GD using CPAN:
+Then install GD using CPAN. This is required for all hosts:
 
 ```
 $ cpan install GD
 ```
 
-GD may already be installed if you are using shared hosting.
+GD may already be installed if you are using shared hosting. You can also install it using your system package manager (apt, yum, pacman, etc).
 
 *Note:* You will want to run regular cleanup on `/img` until we use embedded images.
 
