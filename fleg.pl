@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 #===============================================================================
 # Flegmaker v0.1
 #===============================================================================
@@ -30,7 +29,6 @@ my $VERSION = "0.1";
 
 my ($fleg_width, $fleg_height) = (700, 460);
 my $use_cgi = 1;
-my $true_random = 1;
 my $fleg_write_dir = "./img";
 
 my $fleg_canvas;            # Global, written by all make_$FLAGTYPE functions
@@ -52,17 +50,18 @@ $t_begin = gettimeofday;
 my @epithet = qw(People's Princely Grand Holy Stately Great Ancient Old 
 Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
-Teutonic);
+Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
-Order);
+Order Archipelago League Collective Protectorate Union Province );
 
-my @land_name1 = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
-Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank);
+my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
+Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
+Hol Fran Shlo Pel);
 
-my @land_name2 = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria);
+my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
+ica net ria ova aty ava ah);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -72,7 +71,8 @@ my $STYLESHEET = << "EOF";
 
 body { 
     text-align: center; 
-    background-color: gray;
+    background-color: #fdfdfd;
+    margin: 0;
 }
 
 div#countryName {
@@ -80,12 +80,46 @@ div#countryName {
     font-style: italic;
 }
 
-div#greetLeader {
-
-}
+div#greetLeader { }
 
 div#countryName {
+    display: inline-block;
+    background-color: #feffcb;
 
+    font-family: Palatino, Georgia, serif;
+    font-size: 2em;
+
+    padding: 4px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+
+    border-radius: 15px;
+    border-style: ridge;
+}
+
+p.footer_text {
+    font-family: Verdana, Arial, sans-serif;
+    font-size: 0.8em;
+}
+
+h1#leadTitle {
+    margin-top: 0px;
+    margin-bottom: 2px;
+}
+
+div#subTitle { }
+
+div#leadSection {
+    font-family: Palatino, Georgia, serif;
+    margin: 0px 0px 20px 0px;
+    padding: 20px 0 20px 0;
+    background-color: #ffff1f;
+    border-bottom: 2px solid black;
+}
+
+span.big_slant {
+    font-size: 2em;
+    font-style: italic;
 }
 
 EOF
@@ -102,6 +136,7 @@ sub make_tricolour {
     $fleg_canvas->filledRectangle(2*$third, $fleg_height, $fleg_width, 0, $c3);
 }
 
+
 sub get_color {
     # Limit range so we're neither too bright nor too dim
     return 20 + int rand(210); 
@@ -110,8 +145,8 @@ sub get_color {
 sub christen_the_land {
    $country_name .= "$epithet[int rand(scalar(@epithet))] "; 
    $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
-   $country_name .= "$land_name1[int rand(scalar(@land_name1))]"; 
-   $country_name .= "$land_name2[int rand(scalar(@land_name2))]"; 
+   $country_name .= $land_prefix[int rand(scalar(@land_prefix))]; 
+   $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
 }
 
 sub do_cgi {
@@ -138,22 +173,17 @@ $fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
 $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
 
 # Allocate to colour table and return index.
-if ($true_random) {
-    my @rands;
-    $rands[0] = get_color;
-    $rands[1] = get_color;
-    $rands[2] = get_color;
+my @rands;
+$rands[0] = get_color;
+$rands[1] = get_color;
+$rands[2] = get_color;
 
-    $c1 = $fleg_canvas->colorAllocate($rands[0],$rands[1],$rands[2]);
-    $c2 = $fleg_canvas->colorAllocate($rands[2],$rands[1],$rands[0]);
-    $c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
-} else {
-    die "not implemented";
-}
+$c1 = $fleg_canvas->colorAllocate($rands[0],$rands[1],$rands[2]);
+$c2 = $fleg_canvas->colorAllocate($rands[2],$rands[1],$rands[0]);
+$c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
 
 $fleg_canvas->fill(0,0,$c_white);
 
-# TODO: Other flag styles.
 make_tricolour;
 christen_the_land;
 say $country_name unless($use_cgi);
@@ -188,12 +218,16 @@ __DATA__
     <title>FLEGMAKER</title>
 </head>
 <body>
+<div id="leadSection">
+    <h1 id="leadTitle"><span class="big_slant">B</span>ehold</h1>
+    <div id="subTitle">A new nation is born!</div>
+</div>
 <div id="greetLeader"></div>
 <div id="flegPole"><img src="[% fleg_write_path %]"></div>
 <div id="countryName">[% country_name %]</div>
 
-<p>Flegmaker v[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
-<p>Built in [% t_end %] seconds.</p>
+<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
+<p class="footer_text">Built in [% t_end %] seconds.</p>
 </body>
 </html>
 
