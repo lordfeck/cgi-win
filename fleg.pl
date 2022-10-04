@@ -52,13 +52,15 @@ Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal);
 
+push @epithet, ("", "", "");
+
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
 Order Archipelago League Collective Protectorate Union Province );
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
-Hol Fran Shlo Pel);
+Hol Fran Shlo Pel Bran);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
 ica net ria ova aty ava ah);
