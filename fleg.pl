@@ -195,15 +195,10 @@ $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
 # Allocate to colour table and return index.
 my $chance_of_white = 1 + int rand(5);      # 1 in 5 chance of white for c2
 
-my @rands;
-$rands[0] = get_color;
-$rands[1] = get_color;
-$rands[2] = get_color;
-
-$c1 = $fleg_canvas->colorAllocate($rands[0],$rands[1],$rands[2]);
+$c1 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
 $c2 = $chance_of_white == 5 ? $c_white :
-    $fleg_canvas->colorAllocate($rands[2],$rands[1],$rands[0]);
-$c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
+    $fleg_canvas->colorAllocate(get_color,get_color,get_color);
+$c3 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
 
 $fleg_canvas->fill(0,0,$c_white);
 
