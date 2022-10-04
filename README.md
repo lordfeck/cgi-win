@@ -16,13 +16,23 @@ We assume that:
 
 Firstly you ought to install Perl modules to process CGI and templates (**On your own server these must be available globally for your fcgiwrap to access them. Install as root/sudo to make them global?**):
 
-`cpan install CGI Template::Toolkit`
+```
+cpan install CGI Template::Toolkit
+```
+
+Or on Debian simply run:
+
+```
+# apt install libgd-perl libtemplate-perl libcgi-pm-perl
+```
 
 Then you must enable FastCGI on your web server. I use Nginx so that's all I will detail. Apache instructions are available everywhere.
 
 ```
 # apt install nginx fcgiwrap
 ```
+
+Howto [enable FastCGI on NGinx](https://sleeplessbeastie.eu/2017/09/18/how-to-execute-cgi-scripts-using-fcgiwrap/).
 
 ## Setup - Fleg.pl
 To enable graphics support on Perl, it is necessary to install dependent packages in your environment. (This is not necessary on Strawberry Perl for Windows). For Debian Linux, do the following:
