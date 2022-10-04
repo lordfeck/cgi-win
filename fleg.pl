@@ -250,7 +250,7 @@ __DATA__
 <div id="flegPole"><img src="[% fleg_write_path %]"></div>
 <div id="countryName">[% country_name %]</div>
 
-<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.than.uk" target="_blank">Thransoft</a>.</p>
+<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>.</p>
 <p class="footer_text" title="Will it last?">Established in [% t_end %] seconds.</p>
 </body>
 </html>
