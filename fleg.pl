@@ -51,20 +51,22 @@ $t_begin = gettimeofday;
 my @epithet = qw(People's Princely Grand Holy Stately Great Ancient Old 
 Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
-Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal);
+Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
+Dreaded Pacifist Worker's Lower Lesser);
 
 push @epithet, ("", "", "");        # Small chance epithet is omitted
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
-Order Archipelago League Collective Protectorate Union Province);
+Order Archipelago League Collective Protectorate Union Province Fiefdom
+Emirate Principality Imperium Sheikhdom);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
-Hol Fran Shlo Pel Bran Fle Nor);
+Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq);
+ica net ria ova aty ava ah rina aq terra tonia);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -191,13 +193,16 @@ $fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
 $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
 
 # Allocate to colour table and return index.
+my $chance_of_white = 1 + int rand(5);      # 1 in 5 chance of white for c2
+
 my @rands;
 $rands[0] = get_color;
 $rands[1] = get_color;
 $rands[2] = get_color;
 
 $c1 = $fleg_canvas->colorAllocate($rands[0],$rands[1],$rands[2]);
-$c2 = $fleg_canvas->colorAllocate($rands[2],$rands[1],$rands[0]);
+$c2 = $chance_of_white == 5 ? $c_white :
+    $fleg_canvas->colorAllocate($rands[2],$rands[1],$rands[0]);
 $c3 = $fleg_canvas->colorAllocate($rands[1],$rands[0],$rands[2]);
 
 $fleg_canvas->fill(0,0,$c_white);
@@ -239,7 +244,7 @@ __DATA__
     [% stylesheet %]
     </style>
 
-    <title>FLEGMAKER</title>
+    <title>FLEGGER</title>
 </head>
 <body>
 <div id="leadSection">
