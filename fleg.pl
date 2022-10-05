@@ -195,8 +195,8 @@ sub get_color {
 }
 
 sub christen_the_land {
-    my $chance_of_epithet = 1 + int rand(2);
-   $country_name .= $chance_of_epithet == 2 ?"$epithet[int rand(scalar(@epithet))] " : ""; 
+    my $chance_of_epithet = int rand(10);
+   $country_name .= $chance_of_epithet >= 5 ?"$epithet[int rand(scalar(@epithet))] " : ""; 
    $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
    $country_name .= $land_prefix[int rand(scalar(@land_prefix))]; 
    $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
@@ -252,10 +252,10 @@ $fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
 $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
 
 # Allocate to colour table and return index.
-my $chance_of_white = 1 + int rand(5);      # 1 in 5 chance of white for c2
+my $chance_of_white = 1 + int rand(6);      # 1 in ~5 chance of white for c2
 
 $c1 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
-$c2 = $chance_of_white == 5 ? $c_white :
+$c2 = $chance_of_white >= 5 ? $c_white :
     $fleg_canvas->colorAllocate(get_color,get_color,get_color);
 $c3 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
 
