@@ -40,7 +40,6 @@ my ($t_begin, $t_end) = ("" , "");  # Predeclare time for stats
 my $fleg_write_path = "";           # Final full path where fleg is written
 my $fleg_img_src = "";              # Embed img src, either path or b64 png
 my $country_name = "";              # A fine nation worthy of the ages.
-my $b64_png;                        # Dump the base64 PNG here if use_embed=on
 
 my $template = Template->new();     # Instantiate Template Toolkit
 my $tpl    = join "\n", <DATA>;     # Read __DATA__ and store as tpl
@@ -67,10 +66,10 @@ Emirate Principality Imperium Sheikhdom);
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
 Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
-Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho);
+Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster);
+ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -184,7 +183,7 @@ sub make_eurocross {
 
     $fleg_canvas->fill(0, 0, $c2);
     $fleg_canvas->filledRectangle($midpoint_x - $tenth_w, 0, $midpoint_x + $tenth_w, $fleg_height, $c1);
-    $fleg_canvas->filledRectangle(0, $midpoint_y -$tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
+    $fleg_canvas->filledRectangle(0, $midpoint_y - $tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
 }
 
 sub make_flag {
@@ -221,7 +220,7 @@ sub make_image_write {
 }
 
 sub make_image_embedded {
-    $b64_png = encode_base64($fleg_canvas->png, "");
+    my $b64_png = encode_base64($fleg_canvas->png);
     $fleg_img_src = "data:image/png;base64,$b64_png";
 }
 
