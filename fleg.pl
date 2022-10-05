@@ -16,6 +16,7 @@
 use v5.25;
 use warnings;
 use Time::HiRes qw(gettimeofday);
+use MIME::Base64;
 
 use GD;
 use CGI;
@@ -37,7 +38,9 @@ my $fleg_canvas;            # Global, written by all make_$FLAGTYPE functions
 my ($c_white, $c1, $c2, $c3);       # Predeclare colours
 my ($t_begin, $t_end) = ("" , "");  # Predeclare time for stats
 my $fleg_write_path = "";           # Final full path where fleg is written
+my $fleg_img_src = "";              # Embed img src, either path or b64 png
 my $country_name = "";              # A fine nation worthy of the ages.
+my $b64_png;                        # Dump the base64 PNG here if use_embed=on
 
 my $template = Template->new();     # Instantiate Template Toolkit
 my $tpl    = join "\n", <DATA>;     # Read __DATA__ and store as tpl
@@ -65,10 +68,11 @@ Emirate Principality Imperium Sheikhdom);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
-Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu);
+Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
+Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq terra tonia one);
+ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -199,11 +203,37 @@ sub christen_the_land {
    $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
 }
 
+sub make_image_write {
+    my $ts = time;
+    die "Cannot find $fleg_write_dir" unless -d $fleg_write_dir;
+    $fleg_write_path = "$fleg_write_dir/fleg_$ts.png";
+    open (my $TMPFILE, ">", "$fleg_write_path") 
+        or die "Cannot open $fleg_write_path to write";
+
+    binmode $TMPFILE;
+    print $TMPFILE $fleg_canvas->png;
+    close $TMPFILE;
+    $fleg_img_src = $fleg_write_path;
+}
+
+sub make_image_embedded {
+    $b64_png = encode_base64($fleg_canvas->png, "");
+    $fleg_img_src = "data:image/png;base64,$b64_png";
+}
+
+sub make_image {
+    if ($use_embedded) {
+        make_image_embedded;
+    } else {
+        make_image_write;
+    }
+}
+
 sub do_cgi {
     my $cgi = CGI->new();
 
     $model{stylesheet} = $STYLESHEET;
-    $model{fleg_write_path} = $fleg_write_path;
+    $model{fleg_img_src} = $fleg_img_src;
     $model{country_name} = $country_name;
     $model{version} = $VERSION;
     $model{t_end} = gettimeofday - $t_begin;
@@ -243,16 +273,7 @@ christen_the_land;
 
 say $country_name unless($use_cgi);
 
-my $ts = time;
-
-die "Cannot find $fleg_write_dir" unless -d $fleg_write_dir;
-$fleg_write_path = "$fleg_write_dir/fleg_$ts.png";
-open (my $TMPFILE, ">", "$fleg_write_path") 
-    or die "Cannot open $fleg_write_path to write";
-
-binmode $TMPFILE;
-print $TMPFILE $fleg_canvas->png;
-close $TMPFILE;
+make_image;
 
 do_cgi if ($use_cgi);
 
@@ -278,7 +299,7 @@ __DATA__
     <div id="subTitle">A new nation is born!</div>
 </div>
 <div id="greetLeader"></div>
-<div id="flegPole"><img id="fleg" alt="Fleg missing or your browser does not support base64 embedded images" src="[% fleg_write_path %]"></div>
+<div id="flegPole"><img id="fleg" alt="Fleg missing or your browser does not support base64 embedded images" src="[% fleg_img_src %]"></div>
 <div id="countryName">[% country_name %]</div>
 <div id="reloadPlaceholder">
     <button type="button" title="this displeaseth his majesty?" onClick="window.location.reload()">Renew</button>
