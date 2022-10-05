@@ -59,8 +59,6 @@ Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
 Dreaded Pacifist Worker's Lower Lesser);
 
-push @epithet, ("", "", "");        # Small chance epithet is omitted
-
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
 Order Archipelago League Collective Protectorate Union Province Fiefdom
@@ -197,7 +195,8 @@ sub get_color {
 }
 
 sub christen_the_land {
-   $country_name .= "$epithet[int rand(scalar(@epithet))] "; 
+    my $chance_of_epithet = 1 + int rand(2);
+   $country_name .= $chance_of_epithet == 2 ?"$epithet[int rand(scalar(@epithet))] " : ""; 
    $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
    $country_name .= $land_prefix[int rand(scalar(@land_prefix))]; 
    $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
