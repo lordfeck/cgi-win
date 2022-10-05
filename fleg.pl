@@ -132,7 +132,7 @@ div#reloadPlaceholder {
 
 #reloadPlaceholder button {
     padding: 5px 15px 5px 15px;
-    font-size: 1.8em;
+    font-size: 1.2em;
 }
 
 span.big_slant {
