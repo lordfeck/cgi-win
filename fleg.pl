@@ -28,7 +28,9 @@ my $VERSION = "0.1";
 #===============================================================================
 
 my ($fleg_width, $fleg_height) = (700, 460);
-my $use_cgi = 1;
+my $use_cgi = 1;                    # Set to 0, will just generate flag and exit
+my $allow_adjust = 1;               # Allow minor tweaks to flag dimensions
+my $use_embedded = 1;               # Use embedded images rather than filesystem
 my $fleg_write_dir = "./img";
 
 my $fleg_canvas;            # Global, written by all make_$FLAGTYPE functions
@@ -63,10 +65,10 @@ Emirate Principality Imperium Sheikhdom);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
-Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer);
+Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq terra tonia);
+ica net ria ova aty ava ah rina aq terra tonia one);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -96,7 +98,6 @@ div#countryName {
 
     padding: 4px;
     margin-top: 10px;
-    margin-bottom: 30px;
 
     border-radius: 15px;
     border-style: ridge;
@@ -122,9 +123,21 @@ div#leadSection {
     border-bottom: 2px solid black;
 }
 
+div#reloadPlaceholder {
+    margin-bottom 30px;
+    font-size: 1.5em;
+}
+
 span.big_slant {
     font-size: 2em;
     font-style: italic;
+}
+
+img#fleg {
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 EOF
@@ -149,6 +162,24 @@ sub make_dutchie {
     $fleg_canvas->filledRectangle(0, $third, $fleg_width, 0, $c3);
 }
 
+sub make_eurocross {
+    # Stretch it. TODO: Need to remake GD object, currently truncated
+    #    $fleg_width += 2* sqrt($fleg_width) if ($allow_adjust);
+
+    my $fifth_h = $fleg_height/5;
+    my $fifth_w = ($fleg_width/5) - sqrt($fleg_height);
+
+    my $midpoint_x = $fleg_width/2;
+    my $midpoint_y = $fleg_height/2;
+
+    my $tenth_w = $fifth_w/2;
+    my $tenth_h = $fifth_h/2;
+
+    $fleg_canvas->fill(0, 0, $c2);
+    $fleg_canvas->filledRectangle($midpoint_x - $tenth_w, 0, $midpoint_x + $tenth_w, $fleg_height, $c1);
+    $fleg_canvas->filledRectangle(0, $midpoint_y -$tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
+}
+
 sub make_flag {
     my @keys = keys %fleg_dispatch;
     my $maxIdx = scalar @keys;
@@ -166,7 +197,6 @@ sub christen_the_land {
    $country_name .= "$state_type[int rand(scalar(@state_type))] of "; 
    $country_name .= $land_prefix[int rand(scalar(@land_prefix))]; 
    $country_name .= $land_suffix[int rand(scalar(@land_suffix))]; 
-   chomp $country_name;
 }
 
 sub do_cgi {
@@ -204,7 +234,8 @@ $fleg_canvas->fill(0,0,$c_white);
 
 %fleg_dispatch = (
     dutchie => \&make_dutchie,
-    tricolour => \&make_tricolour
+    tricolour => \&make_tricolour,
+    eurocross => \&make_eurocross
 );
 
 make_flag;
@@ -247,10 +278,13 @@ __DATA__
     <div id="subTitle">A new nation is born!</div>
 </div>
 <div id="greetLeader"></div>
-<div id="flegPole"><img src="[% fleg_write_path %]"></div>
+<div id="flegPole"><img id="fleg" alt="Fleg missing or your browser does not support base64 embedded images" src="[% fleg_write_path %]"></div>
 <div id="countryName">[% country_name %]</div>
+<div id="reloadPlaceholder">
+    <button type="button" title="this displeaseth his majesty?" onClick="window.location.reload()">Renew</button>
+</div>
 
-<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>.</p>
+<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
 <p class="footer_text" title="Will it last?">Established in [% t_end %] seconds.</p>
 </body>
 </html>
