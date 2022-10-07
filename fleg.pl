@@ -8,8 +8,9 @@
 # Authored: 03/10/2022
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Initially generate a random flag.
-# Later allow parameters for customisation.
+# "The new drunk drivers have hoisted the flag" R. Pollard.
+#
+# Generate a flag from random numbers. Use CGI or dump to fs.
 #
 #===============================================================================
 
@@ -144,6 +145,7 @@ img#fleg {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid black;
 }
 
 EOF
