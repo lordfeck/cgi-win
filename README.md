@@ -5,8 +5,8 @@ Fun CGI scripts for the modern web.
 # CONTENTS
 What's inside?
 
-## Fleg.pl
-Flag generator. Bonus: Will also attempt to generate a country name.
+### Fleg.pl
+Flag generator. Bonus: Will also generate a country name.
 
 # SETUP - All
 We assume that:
@@ -17,7 +17,7 @@ We assume that:
 Firstly you ought to install Perl modules to process CGI and templates (**On your own server these must be available globally for your fcgiwrap to access them. Install as root/sudo to make them global?**):
 
 ```
-cpan install CGI Template::Toolkit
+$ cpan install CGI Template::Toolkit
 ```
 
 Or on Debian simply run:
