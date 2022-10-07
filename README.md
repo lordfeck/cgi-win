@@ -9,8 +9,8 @@ What's inside?
 Flag generator. Bonus: Will also generate a country name.
 
 # SETUP - All
-We assume that:
-* You have Perl installed
+We assume that you have:
+* Perl installed.
 * CPAN or cpanm bootstrapped.
 * Some Unix sysadmin knowhow.
 
@@ -20,7 +20,7 @@ Firstly you ought to install Perl modules to process CGI and templates (**On you
 $ cpan install CGI Template::Toolkit
 ```
 
-Or on Debian simply run:
+Or you can avoid invoking CPAN on Debian. Simply run:
 
 ```
 # apt install libgd-perl libtemplate-perl libcgi-pm-perl
