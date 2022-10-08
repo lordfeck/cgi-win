@@ -41,6 +41,7 @@ my ($t_begin, $t_end) = ("" , "");  # Predeclare time for stats
 my $fleg_write_path = "";           # Final full path where fleg is written
 my $fleg_img_src = "";              # Embed img src, either path or b64 png
 my $country_name = "";              # A fine nation worthy of the ages.
+my $chosen_flag_style;              # Store the flag style key here.
 
 my $template = Template->new();     # Instantiate Template Toolkit
 my $tpl    = join "\n", <DATA>;     # Read __DATA__ and store as tpl
@@ -154,6 +155,36 @@ EOF
 # End CSS. Begin fndef
 #===============================================================================
 
+sub adjust_dimensions {
+    if ($chosen_flag_style eq "nordicross") {
+        # Swedish Flag is 5:8 ratio
+        $fleg_height = 5/8 * $fleg_width;
+    } elsif ($chosen_flag_style eq "eurocross") {
+        $fleg_width += 2* sqrt($fleg_width);
+    }
+}
+
+sub get_color {
+    # Limit range so we're neither too bright nor too dim
+    return 20 + int rand(210); 
+}
+
+sub build_fleg_canvas {
+    $fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
+    $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
+
+    my $chance_of_white = 1 + int rand(6);      # 1 in ~5 chance of white for c2
+
+    # Allocate to colour table and return index.
+    $c1 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
+    $c2 = $chance_of_white >= 5 ? $c_white :
+        $fleg_canvas->colorAllocate(get_color,get_color,get_color);
+    $c3 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
+
+    $fleg_canvas->fill(0,0,$c_white);
+}
+
+
 sub make_tricolour {
     my $third = $fleg_width/3;
 
@@ -171,9 +202,6 @@ sub make_dutchie {
 }
 
 sub make_eurocross {
-    # Stretch it. TODO: Need to remake GD object, currently truncated
-    #    $fleg_width += 2* sqrt($fleg_width) if ($allow_adjust);
-
     my $fifth_h = $fleg_height/5;
     my $fifth_w = ($fleg_width/5) - sqrt($fleg_height);
 
@@ -188,16 +216,25 @@ sub make_eurocross {
     $fleg_canvas->filledRectangle(0, $midpoint_y - $tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
 }
 
-sub make_flag {
+sub make_nordicross {
+    my $fifth_h = $fleg_height/5;
+    my $fifth_w = ($fleg_width/5) - 2* sqrt($fleg_height);
+
+    my $midpoint_y = $fleg_height/2;
+
+    my $tenth_w = $fifth_w/2;
+    my $tenth_h = $fifth_h/2;
+
+    $fleg_canvas->fill(0, 0, $c2);
+    $fleg_canvas->filledRectangle($tenth_w*3, 0, $tenth_w*5, $fleg_height, $c1);
+    $fleg_canvas->filledRectangle(0, $midpoint_y - $tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
+}
+
+sub decide_flag {
     my @keys = keys %fleg_dispatch;
     my $maxIdx = scalar @keys;
     # Run a random fn inside fleg_dispatch
-    &{$fleg_dispatch{$keys[int rand($maxIdx)]}};
-}
-
-sub get_color {
-    # Limit range so we're neither too bright nor too dim
-    return 20 + int rand(210); 
+    $chosen_flag_style = $keys[int rand($maxIdx)];
 }
 
 sub christen_the_land {
@@ -253,30 +290,27 @@ sub do_cgi {
 # End fndef. Begin Perl exec
 #===============================================================================
 
-$fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
-# TODO: Make list of flag safe colours?? or allow trueRandom.
-$c_white = $fleg_canvas->colorAllocate(255,255,255); # white
+# Enforce write to dir if CGI disabled
+$use_embedded = 0 unless($use_cgi);
 
-# Allocate to colour table and return index.
-my $chance_of_white = 1 + int rand(6);      # 1 in ~5 chance of white for c2
-
-$c1 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
-$c2 = $chance_of_white >= 5 ? $c_white :
-    $fleg_canvas->colorAllocate(get_color,get_color,get_color);
-$c3 = $fleg_canvas->colorAllocate(get_color,get_color,get_color);
-
-$fleg_canvas->fill(0,0,$c_white);
-
+# Store refrences to each flag function in the dispatch hash
 %fleg_dispatch = (
     dutchie => \&make_dutchie,
     tricolour => \&make_tricolour,
-    eurocross => \&make_eurocross
+    eurocross => \&make_eurocross,
+    nordicross => \&make_nordicross
 );
 
-make_flag;
+# Decide the fleg style using those keys and store it in $chosen_flag_style.
+decide_flag;
+adjust_dimensions if ($allow_adjust);
+build_fleg_canvas;
+
+# Run the function for the chosen flag style.
+&{$fleg_dispatch{$chosen_flag_style}};
 christen_the_land;
 
-say $country_name unless($use_cgi);
+say "Making a $chosen_flag_style for the $country_name" unless($use_cgi);
 
 make_image;
 
