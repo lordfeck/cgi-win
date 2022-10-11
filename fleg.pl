@@ -81,7 +81,7 @@ my $STYLESHEET = << "EOF";
 
 body { 
     text-align: center; 
-    background-color: #fdfdfd;
+    background-color: #eeee9c;
     margin: 0;
 }
 
@@ -114,6 +114,7 @@ p.footer_text {
 h1#leadTitle {
     margin-top: 0px;
     margin-bottom: 2px;
+ text-shadow: 2px 2px black;   
 }
 
 div#subTitle { }
@@ -122,8 +123,9 @@ div#leadSection {
     font-family: Palatino, Georgia, serif;
     margin: 0px 0px 20px 0px;
     padding: 20px 0 20px 0;
-    background-color: #ffff1f;
+    background-color: #311717;
     border-bottom: 2px solid black;
+    color: #dfc0c0;
 }
 
 div#reloadPlaceholder {
