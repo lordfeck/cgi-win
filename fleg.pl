@@ -79,9 +79,9 @@ ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora);
 
 my $STYLESHEET = << "EOF";
 
-body { 
-    text-align: center; 
-    background-color: #eeee9c;
+body {
+    text-align: center;
+    background-color: #f9f9c7;
     margin: 0;
 }
 
@@ -94,7 +94,7 @@ div#greetLeader { }
 
 div#countryName {
     display: inline-block;
-    background-color: #feffcb;
+    background-color: #fdffaa;
 
     font-family: Palatino, Georgia, serif;
     font-size: 2em;
@@ -114,7 +114,7 @@ p.footer_text {
 h1#leadTitle {
     margin-top: 0px;
     margin-bottom: 2px;
- text-shadow: 2px 2px black;   
+ text-shadow: 2px 2px black;
 }
 
 div#subTitle { }
@@ -126,6 +126,7 @@ div#leadSection {
     background-color: #311717;
     border-bottom: 2px solid black;
     color: #dfc0c0;
+    /*! text-emphasis: black blue aquamarine; */
 }
 
 div#reloadPlaceholder {
