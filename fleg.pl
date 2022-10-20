@@ -144,6 +144,8 @@ span.big_slant {
     font-style: italic;
 }
 
+div#flegPole { max-width: 100%; }
+
 img#fleg {
     max-width: 100%;
     display: block;
@@ -347,7 +349,7 @@ __DATA__
     <button type="button" title="this displeaseth his majesty?" onClick="window.location.reload()">Renew</button>
 </div>
 
-<p class="footer_text">Flegmaker v[% version %], by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
+<p class="footer_text">Flegmaker v[% version %] by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
 <p class="footer_text" title="Will it last?">Established in [% t_end %] seconds.</p>
 </body>
 </html>
