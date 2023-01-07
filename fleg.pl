@@ -23,7 +23,7 @@ use GD;
 use CGI;
 use Template;
 
-my $VERSION = "0.1";
+my $VERSION = "0.2";
 
 #===============================================================================
 # Begin Globals and Conf
