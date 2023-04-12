@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 #===============================================================================
-# Flegmaker v0.1
+# Flegmaker v0.2
 #===============================================================================
 # (C) Thransoft, 2022
 # GPL v3.
 # soft.thran.uk
-# Authored: 03/10/2022
+# Authored: 03/10/2022 - 12/04/2023
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # "The new drunk drivers have hoisted the flag" R. Pollard.
@@ -14,26 +14,35 @@
 #
 #===============================================================================
 
-use v5.25;
+use v5.16;
+use strict;
 use warnings;
+use autodie;
+
 use Time::HiRes qw(gettimeofday);
 use MIME::Base64;
+use Scalar::Util qw(looks_like_number);
 
 use GD;
-use CGI;
 use Template;
 
 my $VERSION = "0.2";
 
 #===============================================================================
-# Begin Globals and Conf
+# Begin Configuration
 #===============================================================================
 
 my ($fleg_width, $fleg_height) = (700, 460);
 my $use_cgi = 1;                    # Set to 0, will just generate flag and exit
 my $allow_adjust = 1;               # Allow minor tweaks to flag dimensions
 my $use_embedded = 1;               # Use embedded images rather than filesystem
-my $fleg_write_dir = "./img";
+my $use_count = 1;                  # Enable or disable hit counter
+my $FLEG_WRITE_DIR = "./img";       # When embedded is disabled, write flags here
+my $COUNT_FILE = "../count.txt";    # Hit counter storage
+
+#===============================================================================
+# Begin global variables. Used internally by flegger, do not touch!
+#===============================================================================
 
 my $fleg_canvas;            # Global, written by all make_$FLAGTYPE functions
 my ($c_white, $c1, $c2, $c3);       # Predeclare colours
@@ -42,11 +51,14 @@ my $fleg_write_path = "";           # Final full path where fleg is written
 my $fleg_img_src = "";              # Embed img src, either path or b64 png
 my $country_name = "";              # A fine nation worthy of the ages.
 my $chosen_flag_style;              # Store the flag style key here.
+my $hits = "??";                    # Store the hits read from count.txt
 
 my $template = Template->new();     # Instantiate Template Toolkit
 my $tpl    = join "\n", <DATA>;     # Read __DATA__ and store as tpl
 my %model;                          # Model kvs used for template
 my %fleg_dispatch;                  # Dispatch table used to call a fleg fn
+
+my $CGI_HEADER = "Content-type: text/html\n\n"; # So browsers know what to do.
 
 $t_begin = gettimeofday;
 
@@ -71,7 +83,7 @@ Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
 Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora);
+ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -89,8 +101,6 @@ div#countryName {
     font-family: serif;
     font-style: italic;
 }
-
-div#greetLeader { }
 
 div#countryName {
     display: inline-block;
@@ -111,10 +121,15 @@ p.footer_text {
     font-size: 0.8em;
 }
 
+span.hits {
+    color: #019701;
+    text-shadow: 0px 1px 1px #9d9d9d;
+}
+
 h1#leadTitle {
     margin-top: 0px;
     margin-bottom: 2px;
- text-shadow: 2px 2px black;
+    text-shadow: 2px 2px black;
 }
 
 div#subTitle { }
@@ -126,7 +141,6 @@ div#leadSection {
     background-color: #311717;
     border-bottom: 2px solid black;
     color: #dfc0c0;
-    /*! text-emphasis: black blue aquamarine; */
 }
 
 div#reloadPlaceholder {
@@ -252,8 +266,8 @@ sub christen_the_land {
 
 sub make_image_write {
     my $ts = time;
-    die "Cannot find $fleg_write_dir" unless -d $fleg_write_dir;
-    $fleg_write_path = "$fleg_write_dir/fleg_$ts.png";
+    die "Cannot find $FLEG_WRITE_DIR" unless -d $FLEG_WRITE_DIR;
+    $fleg_write_path = "$FLEG_WRITE_DIR/fleg_$ts.png";
     open (my $TMPFILE, ">", "$fleg_write_path") 
         or die "Cannot open $fleg_write_path to write";
 
@@ -276,20 +290,44 @@ sub make_image {
     }
 }
 
-sub do_cgi {
-    my $cgi = CGI->new();
+sub do_hit_counter {
+    # If reading of count succeeds, keep use_count enabled
+    $use_count = eval {
+        if (-f $COUNT_FILE and -s $COUNT_FILE) {
+            open my $fh, '<', $COUNT_FILE;
+            $hits = <$fh>;
+            close $fh;
+        }
 
+        if (looks_like_number($hits)) {
+            $hits++;
+        } else {
+            $hits = 1;
+        }
+
+        open my $fh, '>', $COUNT_FILE;
+        print $fh $hits;
+
+        close $fh;
+        1;
+    };
+    warn "Problem reading from or writing to $COUNT_FILE" unless $use_count;
+}
+
+sub do_cgi {
     $model{stylesheet} = $STYLESHEET;
     $model{fleg_img_src} = $fleg_img_src;
     $model{country_name} = $country_name;
     $model{version} = $VERSION;
+    $model{hits} = $hits if $use_count;
     $model{t_end} = gettimeofday - $t_begin;
 
-    print $cgi->header;
+    print $CGI_HEADER;
 
     $template->process(\$tpl,\%model) 
         or die "Template process failed", $template->error();
 }
+
 
 #===============================================================================
 # End fndef. Begin Perl exec
@@ -318,8 +356,8 @@ christen_the_land;
 say "Making a $chosen_flag_style for the $country_name" unless($use_cgi);
 
 make_image;
-
-do_cgi if ($use_cgi);
+do_hit_counter if $use_count;
+do_cgi if $use_cgi;
 
 #===============================================================================
 # Data section - TT skeleton
@@ -349,8 +387,11 @@ __DATA__
     <button type="button" title="this displeaseth his majesty?" onClick="window.location.reload()">Renew</button>
 </div>
 
-<p class="footer_text">Flegmaker v[% version %] by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
 <p class="footer_text" title="Will it last?">Established in [% t_end %] seconds.</p>
+[% IF hits -%]
+<p class="footer_text" title="We've been busy.">Produly gifting the world <span class="hits">[% hits %]</span> flegs.</p>
+[% END -%]
+<p class="footer_text">Flegmaker v[% version %] by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
 </body>
 </html>
 
