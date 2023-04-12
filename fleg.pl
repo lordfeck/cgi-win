@@ -17,7 +17,6 @@
 use v5.16;
 use strict;
 use warnings;
-use autodie;
 
 use Time::HiRes qw(gettimeofday);
 use MIME::Base64;

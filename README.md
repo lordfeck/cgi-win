@@ -17,6 +17,8 @@ We assume that you have:
 * CPAN or cpanm bootstrapped.
 * Some Unix sysadmin knowhow.
 
+Required CPAN modules: `GD Template::Toolkit`. There are two ways to install these:
+
 Firstly you ought to install Perl modules to process graphics and templates (**On your own server these must be available globally for your fcgiwrap to access them. Install as root/sudo to make them global?**):
 
 ```
