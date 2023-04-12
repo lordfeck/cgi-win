@@ -49,6 +49,11 @@ $ chmod +x flegger.pl
 
 *Note:* If you have filesystem images enabled you will want to run regular cleanup on `./img`. Flegger uses embedded images by default so this shouldn't be a problem, unless you want the rendered flags to be persisted.
 
+## Hit counter setup
+By default the count is stored in a file at `../count.txt`, i.e. one directory above your cgi-bin, or wherever you have placed `fleg.pl`. This file must be writable by the process running `fleg.pl` or the hit counter will not work. 
+
+If you want to change the filename or path of count.txt, simply edit the value of `$COUNT_FILE` in `fleg.pl`.
+
 # Why CGI?
 You're right to ask this, most folks recommend all serious Perl webdev use a serious framework like Mojolicious.
 
