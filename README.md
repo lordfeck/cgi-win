@@ -56,6 +56,9 @@ By default the count is stored in a file at `../count.txt`, i.e. one directory a
 
 If you want to change the filename or path of count.txt, simply edit the value of `$COUNT_FILE` in `fleg.pl`.
 
+# Uptime.cgi
+Generate uptime stats using Bash and system utilities. Presents it in JSON format so you may use it on your site or perhaps for some rudimentary system monitoring.
+
 # Why CGI?
 You're right to ask this, most folks recommend all serious Perl webdev use a serious framework like Mojolicious.
 
