@@ -387,7 +387,7 @@ __DATA__
     [% stylesheet %]
     </style>
 
-    <title>FLEGER</title>
+    <title>FLEGGER</title>
 </head>
 <body>
 <div id="leadSection">
