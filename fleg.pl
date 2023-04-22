@@ -5,7 +5,7 @@
 # (C) Thransoft, 2022
 # GPL v3.
 # soft.thran.uk
-# Authored: 03/10/2022 - 12/04/2023
+# Authored: 03/10/2022 - 22/04/2023
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # "The new drunk drivers have hoisted the flag" R. Pollard.
@@ -25,7 +25,7 @@ use Scalar::Util qw(looks_like_number);
 use GD;
 use Template;
 
-my $VERSION = "0.2";
+my $VERSION = "0.2.1";
 
 #===============================================================================
 # Begin Configuration
@@ -69,12 +69,13 @@ my @epithet = qw(People's Princely Grand Holy Stately Great Ancient Old
 Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
-Dreaded Pacifist Worker's Lower Lesser);
+Dreaded Pacifist Worker's Lower Lesser Liberated Restored Renewed True New
+);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
 Order Archipelago League Collective Protectorate Union Province Fiefdom
-Emirate Principality Imperium Sheikhdom);
+Emirate Principality Imperium Sheikhdom Mandate County State);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
@@ -88,7 +89,7 @@ ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia);
 # End Phrasemaker, Begin CSS
 #===============================================================================
 
-my $STYLESHEET = << "EOF";
+my $STYLESHEET = << 'EOF';
 
 body {
     text-align: center;
@@ -96,12 +97,11 @@ body {
     margin: 0;
 }
 
+
 div#countryName {
     font-family: serif;
     font-style: italic;
-}
 
-div#countryName {
     display: inline-block;
     background-color: #fdffaa;
 
@@ -157,7 +157,22 @@ span.big_slant {
     font-style: italic;
 }
 
-div#flegPole { max-width: 100%; }
+div#flegPole { 
+    min-height: 500px;
+    max-width: 100%; 
+    margin: auto;
+}
+
+@media only screen and (max-width: 500px) {
+    div#flegPole { 
+        min-height: 250px;
+        max-width: 90%; 
+    }
+
+    div#countryName {
+        font-size: 1.5em;
+    }
+}
 
 img#fleg {
     max-width: 100%;
@@ -372,7 +387,7 @@ __DATA__
     [% stylesheet %]
     </style>
 
-    <title>FLEGGER</title>
+    <title>FLEGER</title>
 </head>
 <body>
 <div id="leadSection">
@@ -380,7 +395,7 @@ __DATA__
     <div id="subTitle">A new nation is born!</div>
 </div>
 <div id="greetLeader"></div>
-<div id="flegPole"><img id="fleg" alt="Fleg missing or your browser does not support base64 embedded images" src="[% fleg_img_src %]"></div>
+<div id="flegPole"><img id="fleg" alt="Fleg stolen or your browser does not support base64 embedded images" src="[% fleg_img_src %]"></div>
 <div id="countryName">[% country_name %]</div>
 <div id="reloadPlaceholder">
     <button type="button" title="this displeaseth his majesty?" onClick="window.location.reload()">Renew</button>
