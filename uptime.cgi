@@ -29,8 +29,6 @@ function jF {
 # END COMMON FUNCTIONS
 #==============================================================================#
 
-writeJSONHeader
-
 # CPU Usage in tenths of a percent
 function getNginxCPU {
     ps --no-headers -C nginx -o cp | awk '{cp += $1} END {print cp}'
@@ -61,7 +59,12 @@ function getUname {
     uname
 }
 
-# Begin JSON composition
+#==============================================================================#
+# Do JSON composition
+#==============================================================================#
+
+writeJSONHeader
+
 echo "{"
 
 jT "hostname"
