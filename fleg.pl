@@ -70,20 +70,22 @@ Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
 Dreaded Pacifist Worker's Lower Lesser Liberated Restored Renewed True New
-);
+Hapsburg Northern Southern Eastern Western);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
 Order Archipelago League Collective Protectorate Union Province Fiefdom
-Emirate Principality Imperium Sheikhdom Mandate County State);
+Emirate Principality Imperium Sheikhdom Mandate County State Dominion
+Margraviate Tanistry Commune);
 
-my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimbab Allo Les Clay Poll
+my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimb Allo Les Clay Poll
 Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
 Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
-Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp);
+Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp Magh Bally);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
-ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia);
+ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia
+donia dom don mor tannia);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -163,7 +165,7 @@ div#flegPole {
     margin: auto;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 700px) {
     div#flegPole { 
         min-height: 250px;
         max-width: 90%; 
