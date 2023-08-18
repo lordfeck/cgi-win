@@ -70,7 +70,7 @@ Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
 Dreaded Pacifist Worker's Lower Lesser Liberated Restored Renewed True New
-Hapsburg Northern Southern Eastern Western);
+Hapsburg Northern Southern Eastern Western Tsardom);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
@@ -79,13 +79,13 @@ Emirate Principality Imperium Sheikhdom Mandate County State Dominion
 Margraviate Tanistry Commune);
 
 my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimb Allo Les Clay Poll
-Cross Bomb Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
+Cross Bom Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
 Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
 Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp Magh Bally);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
 ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia
-donia dom don mor tannia);
+donia dom don mor tannia as ce);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
@@ -405,7 +405,7 @@ __DATA__
 
 <p class="footer_text" title="Will it last?">Established in [% t_end %] seconds.</p>
 [% IF hits -%]
-<p class="footer_text" title="We've been busy.">Produly gifting the world <span class="hits">[% hits %]</span> flegs.</p>
+<p class="footer_text" title="We've been busy.">Proudly gifting the world <span class="hits">[% hits %]</span> flegs.</p>
 [% END -%]
 <p class="footer_text">Flegmaker v[% version %] by <a href="https://soft.thran.uk" target="_blank">Thransoft</a>. <a href="https://github.com/lordfeck/cgi-win" target="_blank">Source</a>.</p>
 </body>
