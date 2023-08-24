@@ -70,22 +70,23 @@ Democratic Theocratic Free High Noble Liberal Serene Socialist Anarchic Nordic
 Eternal Soviet Blessed Absolutist Bourbon Martial Almighty Presidential
 Teutonic Mercantile Maritime Provisional Metropolitan Unified Greater Papal
 Dreaded Pacifist Worker's Lower Lesser Liberated Restored Renewed True New
-Hapsburg Northern Southern Eastern Western Tsardom);
+Hapsburg Northern Southern Eastern Western United);
 
 my @state_type = qw(Republic Kingdom Duchy Despotate Empire Nation Caliphate
 Lordship Earldom States Junta Reich Commonwealth Confederation Bailiwick
 Order Archipelago League Collective Protectorate Union Province Fiefdom
 Emirate Principality Imperium Sheikhdom Mandate County State Dominion
-Margraviate Tanistry Commune);
+Margraviate Tanistry Commune Tsardom Khanate);
 
-my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zimb Allo Les Clay Poll
-Cross Bom Ethel Amer Flow Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
+my @land_prefix = qw(Shi Leo Lea Orm Mos Amer Brit Zim Allo Les Clay Poll
+Cross Bom Ethel Amer Flo Gurg Kor Shef Bess Long Lank Arme Nin Nam Ever Mar
 Hol Fran Shlo Pel Bran Fle Nor Presby West Allay Val Affer Tir Lul Ers Thu
-Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp Magh Bally);
+Flog Flug Glog Noh Sumer Low Lough Blo Mor Gon Rho Apolly Hyp Magh Bally
+Ut Up Ovl Ner Nes Gran Lop Ess Par Pan Ov Neo);
 
 my @land_suffix = qw(topia land ville field shire istan ca iffi ton ina rie via
 ica net ria ova aty ava ah rina aq terra tonia one dor dill dell ster bora lia
-donia dom don mor tannia as ce);
+donia dom don mor tannia as ce tire idad dina ama);
 
 #===============================================================================
 # End Phrasemaker, Begin CSS
