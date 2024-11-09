@@ -4,7 +4,7 @@ Fun CGI scripts for the modern web.
 
 # Fleg.pl
 A flag generator. Currently does the following:
-- Generate a random flag from these styles: French Triband, Dutch Triband, British Cross, Nordic Cross
+- Generate a random flag from these styles: French Triband, Dutch Triband, British Cross, Nordic Cross, Saltire
 - Generate a 'suitable' country name
 - Basic hit counter recording the number of flags generated
 
