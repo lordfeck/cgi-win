@@ -5,7 +5,7 @@
 # (C) Thransoft, 2022
 # GPL v3.
 # soft.thran.uk
-# Authored: 03/10/2022 - 22/04/2023
+# Authored: 03/10/2022 - 09/11/2024
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # "The new drunk drivers have hoisted the flag" R. Pollard.
@@ -25,7 +25,7 @@ use Scalar::Util qw(looks_like_number);
 use GD;
 use Template;
 
-my $VERSION = "0.2.1";
+my $VERSION = "0.2.2";
 
 #===============================================================================
 # Begin Configuration
@@ -111,7 +111,7 @@ div#countryName {
     font-family: Palatino, Georgia, serif;
     font-size: 2em;
 
-    padding: 4px;
+    padding: 10px;
     margin-top: 10px;
 
     border-radius: 15px;
@@ -174,6 +174,7 @@ div#flegPole {
 
     div#countryName {
         font-size: 1.5em;
+        padding: 8px;
     }
 }
 
@@ -206,7 +207,7 @@ sub get_color {
 }
 
 sub build_fleg_canvas {
-    $fleg_canvas = GD::Image->new($fleg_width, $fleg_height, 1);
+    $fleg_canvas = GD::Image->newTrueColor($fleg_width, $fleg_height, 1);
     $c_white = $fleg_canvas->colorAllocate(255,255,255); # white
 
     my $chance_of_white = 1 + int rand(6);      # 1 in ~5 chance of white for c2
@@ -264,6 +265,24 @@ sub make_nordicross {
     $fleg_canvas->fill(0, 0, $c2);
     $fleg_canvas->filledRectangle($tenth_w*3, 0, $tenth_w*5, $fleg_height, $c1);
     $fleg_canvas->filledRectangle(0, $midpoint_y - $tenth_h, $fleg_width, $midpoint_y + $tenth_h, $c1);
+}
+
+sub make_saltire {
+    my @origin = (0,0);
+    my @target = ($fleg_width, $fleg_height);
+
+    my $tenth_w = int ($fleg_width/10);
+
+    $fleg_canvas->fill(0, 0, $c2); # chance that c2 may be white or other colour.
+
+    $fleg_canvas->setAntiAliased($c1); 
+    $fleg_canvas->setThickness($tenth_w);
+    $fleg_canvas->line(@origin, @target, $c1);
+
+    @origin = (0, $fleg_height);
+    @target = ($fleg_width, 0);
+    
+    $fleg_canvas->line(@origin, @target, $c1);
 }
 
 sub decide_flag {
@@ -337,7 +356,7 @@ sub do_cgi {
     $model{country_name} = $country_name;
     $model{version} = $VERSION;
     $model{hits} = $hits if $use_count;
-    $model{t_end} = gettimeofday - $t_begin;
+    $model{t_end} = sprintf("%.4f", gettimeofday - $t_begin);
 
     print $CGI_HEADER;
 
@@ -358,7 +377,8 @@ $use_embedded = 0 unless($use_cgi);
     dutchie => \&make_dutchie,
     tricolour => \&make_tricolour,
     eurocross => \&make_eurocross,
-    nordicross => \&make_nordicross
+    nordicross => \&make_nordicross,
+    saltire => \&make_saltire
 );
 
 # Decide the fleg style using those keys and store it in $chosen_flag_style.
@@ -394,8 +414,7 @@ __DATA__
 </head>
 <body>
 <div id="leadSection">
-    <h1 id="leadTitle"><span class="big_slant">B</span>ehold</h1>
-    <div id="subTitle">A new nation is born!</div>
+    <h1 id="leadTitle"><span class="big_slant">B</span>ehold,</h1><div id="subTitle">A new nation is born!</div>
 </div>
 <div id="greetLeader"></div>
 <div id="flegPole"><img id="fleg" alt="Fleg stolen or your browser does not support base64 embedded images" src="[% fleg_img_src %]"></div>

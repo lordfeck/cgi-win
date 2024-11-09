@@ -3,7 +3,8 @@
 * Implement other flag styles
 * Introduce improbable styles, or emblems that are unlikely to show so we have rareflegs.
 * Switch to inline base64 data:  for the image embedding. +DONE
-* also make country names rare
+* also make country names appropriate to the flag culture
+* better balancing of the colours
 * separate out config files
 * fleg can run without cgi, dump fleg and name then exit
 * seed number - will reproduce the same flag and country name with a seed number
@@ -13,7 +14,7 @@ Other fleg styles:
 * nelson
 * multiband
 * eurocross + DONE
-* nordic_cross
-* saltire
+* nordic_cross + DONE
+* saltire + DONE
 
 
